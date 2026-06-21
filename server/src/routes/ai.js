@@ -34,6 +34,14 @@ router.post('/coach', requireAuth, async (req, res) => {
   try {
     const { emissions, form, percentile, greenScore, persona } = req.body
 
+    // Input validation
+    if (!emissions || typeof emissions.total !== 'number' || !Number.isFinite(emissions.total)) {
+      return res.status(400).json({ error: 'emissions.total must be a finite number' })
+    }
+    if (typeof greenScore !== 'number' || !Number.isFinite(greenScore)) {
+      return res.status(400).json({ error: 'greenScore must be a finite number' })
+    }
+
     // Pull user profile + last 6 submissions for personalisation
     const [history, userProfile] = await Promise.all([
       Submission.find({ uid: req.uid }).sort({ createdAt: -1 }).limit(6).lean(),
@@ -109,6 +117,11 @@ MONTHLY CHALLENGE
 router.post('/challenges', requireAuth, async (req, res) => {
   try {
     const { emissions } = req.body
+
+    // Input validation
+    if (!emissions || typeof emissions.total !== 'number' || !Number.isFinite(emissions.total)) {
+      return res.status(400).json({ error: 'emissions.total must be a finite number' })
+    }
 
     const history = await Submission.find({ uid: req.uid })
       .sort({ createdAt: -1 }).lean()

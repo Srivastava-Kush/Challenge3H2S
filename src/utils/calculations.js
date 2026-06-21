@@ -65,10 +65,21 @@ export function calcDailyEmissions(f) {
   };
 }
 
+/**
+ * Returns the annualised CO₂ equivalent of a monthly emission figure.
+ * @param {number} monthly - Monthly CO₂ in kg
+ * @returns {number} Annual CO₂ in kg, rounded to 2 decimal places
+ */
 export function calculateAnnual(monthly) {
   return +(monthly * 12).toFixed(2);
 }
 
+/**
+ * Returns a short display label for a month offset from today.
+ * e.g. monthLabel(0) → "Jun '26", monthLabel(1) → "May '26"
+ * @param {number} offsetMonths - How many months back from today (0 = current)
+ * @returns {string} Abbreviated month label e.g. "Jun '26"
+ */
 export function monthLabel(offsetMonths = 0) {
   const d = new Date();
   d.setMonth(d.getMonth() - offsetMonths);
@@ -124,6 +135,14 @@ export function validateDailyForm(f) {
   return e;
 }
 
+/**
+ * Generates a locally-relevant, actionable insight based on the user's top emission category.
+ * The tip is tailored for Indian households (e.g. state grid, LPG, induction cooktops).
+ *
+ * @param {Object} emissions - Emissions breakdown object (keys: electricity, lpg, transport, diet, smartphone, laptop)
+ * @param {Object} form - Raw form inputs (currently unused, reserved for future state-specific tips)
+ * @returns {string} A contextualised tip targeting the user's largest emission source
+ */
 export function localInsight(emissions, form) {
   const CAT_LABELS = {
     electricity: 'electricity', lpg: 'LPG gas',

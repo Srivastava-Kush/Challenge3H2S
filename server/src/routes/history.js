@@ -4,12 +4,18 @@ import Submission from '../models/Submission.js'
 
 const router = Router()
 
+// Allowlist for the ?type= query parameter — prevents arbitrary string injection into MongoDB
+const ALLOWED_TYPES = new Set(['daily', 'monthly'])
+
 // GET /api/history — all submissions for the logged-in user
 // Optionally query ?type=daily or ?type=monthly
 router.get('/', requireAuth, async (req, res) => {
   try {
     const query = { uid: req.uid }
     if (req.query.type) {
+      if (!ALLOWED_TYPES.has(req.query.type)) {
+        return res.status(400).json({ error: 'Invalid type parameter. Must be "daily" or "monthly".' })
+      }
       query.type = req.query.type
     }
     const submissions = await Submission.find(query)
@@ -32,6 +38,12 @@ router.post('/', requireAuth, async (req, res) => {
 
     if (!actualDate || total == null) {
       return res.status(400).json({ error: 'date and total are required' })
+    }
+    if (typeof total !== 'number' || !Number.isFinite(total) || total < 0) {
+      return res.status(400).json({ error: 'total must be a non-negative finite number' })
+    }
+    if (actualType && !ALLOWED_TYPES.has(actualType)) {
+      return res.status(400).json({ error: 'type must be "daily" or "monthly"' })
     }
     const doc = await Submission.findOneAndUpdate(
       { uid: req.uid, date: actualDate, type: actualType },

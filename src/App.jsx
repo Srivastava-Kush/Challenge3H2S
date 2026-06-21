@@ -1,4 +1,8 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo, Suspense } from 'react'
+import AuthModal from './components/AuthModal'
+import UserMenu from './components/UserMenu'
+import Profile from './components/Profile'
+import { useAuth } from './context/AuthContext'
 import { INDIA_AVERAGES } from './constants/indiaAverages'
 import { calcEmissions, calcDailyEmissions, validateForm, validateDailyForm } from './utils/calculations'
 import { ACTIONS, CAT_META } from './constants/actionItems'
@@ -17,10 +21,6 @@ const Dashboard = React.memo(DashboardComponent)
 const HistorySection = React.memo(HistorySectionComponent)
 const WhatIfSimulator = React.memo(WhatIfSimulatorComponent)
 const PredictionModelSection = React.memo(PredictionModelSectionComponent)
-import AuthModal from './components/AuthModal'
-import UserMenu from './components/UserMenu'
-import Profile from './components/Profile'
-import { useAuth } from './context/AuthContext'
 
 const INDIA_AVG = INDIA_AVERAGES.monthly
 
@@ -589,14 +589,18 @@ function Results({ emissions, form, mode, graphData, currentAvg, onClearHistory,
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <h2 className="results-title" style={{ margin: 0 }}>📈 Emission Trends</h2>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem' }} role="group" aria-label="Select trend view">
             <button 
+              id="btn-trend-daily"
               onClick={() => setGraphType('daily')}
+              aria-pressed={graphType === 'daily'}
               style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: '1px solid #cbd5e1', background: graphType === 'daily' ? '#16a34a' : '#fff', color: graphType === 'daily' ? '#fff' : '#475569', cursor: 'pointer' }}>
               Daily
             </button>
             <button 
+              id="btn-trend-monthly"
               onClick={() => setGraphType('monthly')}
+              aria-pressed={graphType === 'monthly'}
               style={{ padding: '0.5rem 1rem', borderRadius: '4px', border: '1px solid #cbd5e1', background: graphType === 'monthly' ? '#16a34a' : '#fff', color: graphType === 'monthly' ? '#fff' : '#475569', cursor: 'pointer' }}>
               Monthly
             </button>
@@ -1045,14 +1049,18 @@ export default function App() {
             <div className="card">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <h2 className="card-title" style={{ margin: 0 }}>Enter Your Data</h2>
-                <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '4px' }}>
+                <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '4px' }} role="group" aria-label="Select calculation mode">
                   <button 
+                    id="btn-mode-daily"
                     onClick={() => { setMode('daily'); }}
+                    aria-pressed={mode === 'daily'}
                     style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', background: mode === 'daily' ? '#fff' : 'transparent', boxShadow: mode === 'daily' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', fontWeight: mode === 'daily' ? 600 : 400, cursor: 'pointer' }}>
                     Daily Emission
                   </button>
                   <button 
+                    id="btn-mode-monthly"
                     onClick={() => { setMode('monthly'); }}
+                    aria-pressed={mode === 'monthly'}
                     style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', background: mode === 'monthly' ? '#fff' : 'transparent', boxShadow: mode === 'monthly' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', fontWeight: mode === 'monthly' ? 600 : 400, cursor: 'pointer' }}>
                     Monthly Emission
                   </button>
@@ -1141,7 +1149,7 @@ export default function App() {
         )}
       </main>
 
-      <footer className="app-footer" role="contentinfo">
+      <footer className="app-footer" role="contentinfo" aria-label="Data sources and attributions">
         <p>
           Powered by Google Gemini · Data sources: CEA 2022-23 · ICCT India Two-Wheeler Study · MoRTH 2022 · FAO/WRI Food Systems ·
           India avg = {INDIA_AVG} kg CO&#8322;/person/month
