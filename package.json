@@ -7,7 +7,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "cd server && npm run dev",
-    "dev:all": "concurrently -n FE,BE -c green,blue \"npm run dev\" \"npm run server\""
+    "dev:all": "concurrently -n FE,BE -c green,blue \"npm run dev\" \"npm run server\"",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "firebase": "^12.14.0",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
     "concurrently": "^10.0.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "vitest": "^4.1.9"
   }
 }

@@ -6,6 +6,17 @@ import User from '../models/User.js'
 
 const router = Router()
 
+// Simple in-memory cache to prevent duplicate Gemini API calls for identical requests
+const aiCache = new Map()
+
+function setCache(key, value) {
+  if (aiCache.size > 1000) {
+    const firstKey = aiCache.keys().next().value
+    aiCache.delete(firstKey)
+  }
+  aiCache.set(key, value)
+}
+
 function getModel() {
   const key = process.env.GEMINI_API_KEY
   if (!key || key.startsWith('PLACEHOLDER')) {
@@ -79,9 +90,16 @@ RECOMMENDATIONS
 MONTHLY CHALLENGE
 ([one 30-day challenge specific to their top emission category and Indian context])`
 
+    const cacheKey = `coach_${req.uid}_${emissions.total}_${topCat[0]}_${greenScore}`
+    if (aiCache.has(cacheKey)) {
+      return res.json({ text: aiCache.get(cacheKey) })
+    }
+
     const model = getModel()
     const result = await model.generateContent(prompt)
-    res.json({ text: result.response.text() })
+    const text = result.response.text()
+    setCache(cacheKey, text)
+    res.json({ text })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
@@ -125,9 +143,16 @@ CO2 Saving: <number> kg
 Money Saving: Rs <number>
 Duration: 30 days`
 
+    const cacheKey = `challenges_${req.uid}_${emissions.total}_${history.length}`
+    if (aiCache.has(cacheKey)) {
+      return res.json({ text: aiCache.get(cacheKey) })
+    }
+
     const model = getModel()
     const result = await model.generateContent(prompt)
-    res.json({ text: result.response.text() })
+    const text = result.response.text()
+    setCache(cacheKey, text)
+    res.json({ text })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

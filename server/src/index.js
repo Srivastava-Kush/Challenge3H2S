@@ -54,15 +54,18 @@ app.use((err, _req, res, _next) => {
 })
 
 const PORT = process.env.PORT || 5000
+if (process.env.NODE_ENV !== 'test') {
+  connectDB()
+    .catch(err => console.error('MongoDB connection error:', err.message))
 
-connectDB()
-  .catch(err => console.error('MongoDB connection error:', err.message))
+  // Always start the server even if MongoDB isn't connected
+  // (AI and auth routes work without DB; history routes will return 503)
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`)
+    if (MISSING.length) {
+      console.log('   Configure the missing keys in server/.env to enable all features.')
+    }
+  })
+}
 
-// Always start the server even if MongoDB isn't connected
-// (AI and auth routes work without DB; history routes will return 503)
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-  if (MISSING.length) {
-    console.log('   Configure the missing keys in server/.env to enable all features.')
-  }
-})
+export default app

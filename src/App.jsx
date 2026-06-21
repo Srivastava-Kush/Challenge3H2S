@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
+import React, { useState, useCallback, useRef, useEffect, useMemo, Suspense } from 'react'
 import { INDIA_AVERAGES } from './constants/indiaAverages'
 import { calcEmissions, calcDailyEmissions, validateForm, validateDailyForm } from './utils/calculations'
 import { ACTIONS, CAT_META } from './constants/actionItems'
@@ -6,12 +6,17 @@ import { STATES_LIST, getGridFactor } from './constants/stateGridFactors'
 import { calculateGreenScore } from './utils/greenScore'
 import { calculatePercentile } from './utils/percentile'
 import { api } from './utils/api'
-import BillUpload from './components/BillUpload'
-import Dashboard from './components/Dashboard'
-import HistorySection from './components/HistorySection'
-import WhatIfSimulator from './components/WhatIfSimulator'
-import PredictionModelSection from './components/PredictionModelSection'
+const BillUpload = React.lazy(() => import('./components/BillUpload'))
+import DashboardComponent from './components/Dashboard'
+import HistorySectionComponent from './components/HistorySection'
+import WhatIfSimulatorComponent from './components/WhatIfSimulator'
+import PredictionModelSectionComponent from './components/PredictionModelSection'
 import AICoach from './components/AICoach'
+
+const Dashboard = React.memo(DashboardComponent)
+const HistorySection = React.memo(HistorySectionComponent)
+const WhatIfSimulator = React.memo(WhatIfSimulatorComponent)
+const PredictionModelSection = React.memo(PredictionModelSectionComponent)
 import AuthModal from './components/AuthModal'
 import UserMenu from './components/UserMenu'
 import Profile from './components/Profile'
@@ -165,7 +170,7 @@ function Breakdown({ emissions }) {
 }
 
 /* ── Trend chart (pure SVG) ────────────────────────── */
-function TrendChart({ data, xKey = 'month', baselineValue = INDIA_AVG, baselineLabel = 'India avg' }) {
+const TrendChart = React.memo(function TrendChart({ data, xKey = 'month', baselineValue = INDIA_AVG, baselineLabel = 'India avg' }) {
   const [tip, setTip] = useState(null)
   const W = 560, H = 220, ML = 52, MR = 20, MT = 14, MB = 36
   const cw = W - ML - MR, ch = H - MT - MB
@@ -253,10 +258,10 @@ function TrendChart({ data, xKey = 'month', baselineValue = INDIA_AVG, baselineL
       </div>
     </div>
   )
-}
+})
 
 /* ── Action checklist ───────────────────────────────────────── */
-function ActionList() {
+const ActionList = React.memo(function ActionList() {
   const [checked, setChecked] = useState({})
   const saved = ACTIONS.filter(a => checked[a.id]).reduce((s, a) => s + a.saving, 0)
 
@@ -288,7 +293,7 @@ function ActionList() {
       </ul>
     </div>
   )
-}
+})
 
 
 /* ── Calculator form ────────────────────────────────────────── */
@@ -358,32 +363,36 @@ function CalcForm({ onCalc, defaults = {} }) {
             <NumberInput id="electricity" value={f.electricity} onChange={handle} onBlur={blur}
               error={errors.electricity} max={9999} />
           </Field>
-          <BillUpload
-            fieldType="electricity"
-            label="electricity bill"
-            onValueExtracted={val => {
-              const nf = { ...f, electricity: val }
-              setF(nf)
-              setTouched(t => ({ ...t, electricity: true }))
-              setErrors(validateForm(nf))
-            }}
-          />
+          <Suspense fallback={<div style={{padding: '1rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b'}}>Loading scanner...</div>}>
+            <BillUpload
+              fieldType="electricity"
+              label="electricity bill"
+              onValueExtracted={val => {
+                const nf = { ...f, electricity: val }
+                setF(nf)
+                setTouched(t => ({ ...t, electricity: true }))
+                setErrors(validateForm(nf))
+              }}
+            />
+          </Suspense>
 
           <Field id="lpg" label="LPG cylinders used" required
             hint="14.2 kg domestic cylinders per month" error={errors.lpg}>
             <NumberInput id="lpg" value={f.lpg} onChange={handle} onBlur={blur}
               error={errors.lpg} max={20} step="0.5" />
           </Field>
-          <BillUpload
-            fieldType="lpg"
-            label="LPG receipt"
-            onValueExtracted={val => {
-              const nf = { ...f, lpg: val }
-              setF(nf)
-              setTouched(t => ({ ...t, lpg: true }))
-              setErrors(validateForm(nf))
-            }}
-          />
+          <Suspense fallback={<div style={{padding: '1rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b'}}>Loading scanner...</div>}>
+            <BillUpload
+              fieldType="lpg"
+              label="LPG receipt"
+              onValueExtracted={val => {
+                const nf = { ...f, lpg: val }
+                setF(nf)
+                setTouched(t => ({ ...t, lpg: true }))
+                setErrors(validateForm(nf))
+              }}
+            />
+          </Suspense>
         </section>
 
         <section className="form-section" aria-labelledby="sec-transport">
