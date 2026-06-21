@@ -679,6 +679,7 @@ export default function App() {
   // Duplicate prompt modal overlay
   const [existingPrompt, setExistingPrompt] = useState(null)
   const [isUpdatingRecord, setIsUpdatingRecord] = useState(false)
+  const [iconFailed, setIconFailed] = useState(false)
 
   // Override viewed calculation
   const [viewedCalculation, setViewedCalculation] = useState(null)
@@ -913,7 +914,18 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header" role="banner">
-        <div className="header-icon" aria-hidden="true" onClick={() => setView('home')} style={{cursor: 'pointer'}}>🌿</div>
+        <div className="header-icon" aria-hidden="true" onClick={() => setView('home')} style={{cursor: 'pointer', display: 'flex', alignItems: 'center'}}>
+          {!iconFailed ? (
+            <img 
+              src="/favicon.ico" 
+              alt="Logo" 
+              style={{ width: '2.8rem', height: '2.8rem', objectFit: 'contain' }} 
+              onError={() => setIconFailed(true)} 
+            />
+          ) : (
+            '🌿'
+          )}
+        </div>
         <div style={{ flex: 1 }}>
           <h1 className="app-title" onClick={() => setView('home')} style={{cursor: 'pointer'}}>India Carbon Footprint Tracker</h1>
           <p className="app-subtitle">
