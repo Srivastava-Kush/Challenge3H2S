@@ -1,0 +1,58 @@
+export const BADGES = [
+  {
+    id: 'green_beginner',
+    name: 'Green Beginner',
+    description: 'Submitted your first carbon footprint calculation',
+    icon: '🌱',
+    condition: 'Any submission',
+  },
+  {
+    id: 'eco_explorer',
+    name: 'Eco Explorer',
+    description: 'Your monthly footprint is below the India average of 158 kg',
+    icon: '🧭',
+    condition: 'Total below 158 kg/month',
+  },
+  {
+    id: 'energy_saver',
+    name: 'Energy Saver',
+    description: 'Electricity emissions are under 40 kg per month',
+    icon: '⚡',
+    condition: 'Electricity below 40 kg/month',
+  },
+  {
+    id: 'green_commuter',
+    name: 'Green Commuter',
+    description: 'Transport emissions are under 30 kg per month',
+    icon: '🚲',
+    condition: 'Transport below 30 kg/month',
+  },
+  {
+    id: 'climate_hero',
+    name: 'Climate Hero',
+    description: 'Total monthly footprint is below 100 kg',
+    icon: '🦸',
+    condition: 'Total below 100 kg/month',
+  },
+  {
+    id: 'carbon_ninja',
+    name: 'Carbon Ninja',
+    description: 'Total monthly footprint is below 80 kg',
+    icon: '🥷',
+    condition: 'Total below 80 kg/month',
+  },
+  {
+    id: 'consistency_champion',
+    name: 'Consistency Champion',
+    description: 'You have tracked your footprint for 3 or more months',
+    icon: '🏆',
+    condition: '3 months of data in history',
+  },
+  {
+    id: 'solar_champion',
+    name: 'Solar Champion',
+    description: 'Electricity emissions are under 20 kg — solar-level efficiency',
+    icon: '☀️',
+    condition: 'Electricity below 20 kg/month',
+  },
+];

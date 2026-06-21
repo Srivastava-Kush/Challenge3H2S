@@ -1,0 +1,25 @@
+{
+  "name": "india-carbon-tracker",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3456",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "cd server && npm run dev",
+    "dev:all": "concurrently -n FE,BE -c green,blue \"npm run dev\" \"npm run server\""
+  },
+  "dependencies": {
+    "firebase": "^12.14.0",
+    "pdfjs-dist": "^5.6.205",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^3.8.1",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^10.0.3",
+    "vite": "^5.4.8"
+  }
+}

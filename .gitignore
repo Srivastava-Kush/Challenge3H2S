@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Build output
+dist/
+server/dist/
+
+# Environment files — NEVER commit real credentials
+.env
+server/.env
+
+# Firebase service account key — contains private key
+serviceAccountKey.json
+server/serviceAccountKey.json
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.local
+
+issues.txt
+SETUP.md
+DEPLOYMENT.md
+.env.example
+.claude/
+REFERENCES.md

@@ -1,0 +1,58 @@
+export const ROADMAP = [
+  {
+    week: 1,
+    action: 'Switch all bulbs to LED',
+    difficulty: 'Easy',
+    co2Saving: 5,
+    moneySaving: 200,
+  },
+  {
+    week: 1,
+    action: 'Set AC thermostat to 24 degrees C',
+    difficulty: 'Easy',
+    co2Saving: 14,
+    moneySaving: 600,
+  },
+  {
+    week: 2,
+    action: 'Use metro or bus at least 3 times per week',
+    difficulty: 'Medium',
+    co2Saving: 28,
+    moneySaving: 800,
+  },
+  {
+    week: 2,
+    action: 'Start one plant-based meal day per week',
+    difficulty: 'Easy',
+    co2Saving: 22,
+    moneySaving: 300,
+  },
+  {
+    week: 3,
+    action: 'Install a solar water heater',
+    difficulty: 'Hard',
+    co2Saving: 15,
+    moneySaving: 1500,
+  },
+  {
+    week: 3,
+    action: 'Carpool to work daily',
+    difficulty: 'Medium',
+    co2Saving: 32,
+    moneySaving: 2000,
+  },
+  {
+    week: 4,
+    action: 'Upgrade to 5-star BEE rated appliances',
+    difficulty: 'Hard',
+    co2Saving: 8,
+    moneySaving: 1200,
+  },
+  {
+    week: 4,
+    action: 'Switch from LPG to induction cooktop',
+    difficulty: 'Medium',
+    co2Saving: 10,
+    moneySaving: 500,
+  },
+];
